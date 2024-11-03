@@ -1,32 +1,39 @@
 "use client";
 
-import { useEffect, useRef, type KeyboardEventHandler } from "react";
+import { useEffect, useRef, useState, type KeyboardEventHandler } from "react";
 
-// what is contenteditable ? and when to use it ?
-// How to capture insertion of new dom node in contenteditable div ?
+const KEY_CODE = {
+  BACKSPACE: "Backspace",
+  ENTER: "Enter",
+};
 
-// when enter, it create p tag with attrs
-// How to do this with contenteditable ?
-
-// MutaitonObserver and intercept the key events
-
-// Capture insertion of new node -> MutationObserver
-// Insert custom node ->
-
-// selection and range
+const createParagraph = () => {
+  const p = document.createElement("p");
+  p.className = "text-2xl mt-3";
+  p.innerHTML = "<br>";
+  p.setAttribute("data-label", "paragraph");
+  return p;
+};
 
 export default function WriteForm() {
   const editorRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [nNodes, setNNodes] = useState(0);
+  const canPublish = nNodes > 0;
 
   useEffect(() => {
     if (!editorRef.current) return;
+
     const observer = new MutationObserver((records) => {
       records.forEach((record) => {
         record.addedNodes.forEach((node) => {
           console.log("Node added", node);
+          setNNodes((prev) => prev + 1);
         });
         record.removedNodes.forEach((node) => {
           console.log("Node removed", node);
+          setNNodes((prev) => prev - 1);
         });
       });
     });
@@ -41,56 +48,87 @@ export default function WriteForm() {
     };
   }, []);
 
-  const createParagraph = () => {
-    const p = document.createElement("p");
-    p.className = "text-2xl font-bold border rounded-md mt-3";
-    p.innerHTML = "<br>";
-    p.setAttribute("data-label", "paragraph");
-    return p;
-  };
-
   const handleKeydown: KeyboardEventHandler<HTMLDivElement> = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === KEY_CODE.BACKSPACE) {
+      // delete text node and paragraph node
+      // but prevent deleting title node and cotent node
+      const selection = window.getSelection();
+      if (!selection || !selection.rangeCount) return;
+
+      const range = selection.getRangeAt(0);
+      const node = range.commonAncestorContainer;
+
+      if (node === titleRef.current) {
+        e.preventDefault();
+      }
+      if (node === contentRef.current) {
+        e.preventDefault();
+      }
+    }
+
+    if (e.key === KEY_CODE.ENTER) {
       e.preventDefault();
-      const editor = editorRef.current;
-      if (!editor) return;
-      const p = createParagraph();
+      const content = contentRef.current;
+      if (!content) return;
+
+      const newParapraph = createParagraph();
       const selection = window.getSelection();
 
       if (selection && selection.rangeCount > 0) {
         const range = selection.getRangeAt(0);
-        range.deleteContents();
-        const cur = range.startContainer;
-        let nextPosition: ChildNode | null = null;
+        const cur = range.commonAncestorContainer;
+        let nextToInsertPosition: ChildNode | null = null;
         if (cur.nodeType !== Node.ELEMENT_NODE) {
           const parent = cur.parentElement as HTMLElement;
-          nextPosition = parent.nextSibling;
+          nextToInsertPosition = parent.nextSibling;
         } else {
-          nextPosition = cur.nextSibling;
-        }
-        if (nextPosition) {
-          editor.insertBefore(p, nextPosition);
-        } else {
-          editor.appendChild(p);
+          nextToInsertPosition = cur.nextSibling;
         }
 
-        // move caret to the new p node
-        range.setStart(p, 0);
-        range.setEnd(p, 0);
+        if (nextToInsertPosition) {
+          content.insertBefore(newParapraph, nextToInsertPosition);
+        } else {
+          content.appendChild(newParapraph);
+        }
+        range.setStart(newParapraph, 0);
+        range.setEnd(newParapraph, 0);
         selection.removeAllRanges();
         selection.addRange(range);
       }
     }
   };
+
+  const handlePublish = async () => {};
+
   return (
-    <div
-      ref={editorRef}
-      aria-label="WriteBlog"
-      role="textbox"
-      contentEditable
-      onInput={(e) => console.log(e)}
-      onKeyDown={handleKeydown}
-      className="outline-0"
-    ></div>
+    <section>
+      <div className="flex justify-end">
+        <button
+          className="px-2 py-1 bg-green-600 text-white rounded-md"
+          disabled={!canPublish}
+          onClick={handlePublish}
+        >
+          Publish
+        </button>
+      </div>
+      <div
+        ref={editorRef}
+        aria-label="WriteBlog"
+        role="textbox"
+        contentEditable
+        onKeyDown={handleKeydown}
+        className="outline-0"
+      >
+        <section ref={contentRef} aria-label="story-content-container">
+          <h3
+            className="text-4xl font-bold"
+            ref={titleRef}
+            aria-label="content-title"
+          >
+            Tell your story...
+          </h3>
+        </section>
+      </div>
+    </section>
   );
 }

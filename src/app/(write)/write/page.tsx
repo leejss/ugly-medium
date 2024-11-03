@@ -1,9 +1,12 @@
 import WriteForm from "./components/WriteForm";
+import WriteLayout from "./layout/write-layout";
 
 export default function Page() {
   return (
-    <div>
-      <WriteForm />
-    </div>
+    <WriteLayout>
+      <div>
+        <WriteForm />
+      </div>
+    </WriteLayout>
   );
 }
