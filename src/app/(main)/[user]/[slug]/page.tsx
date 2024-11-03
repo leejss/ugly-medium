@@ -2,6 +2,7 @@ import { ContentNode } from "@/app/types";
 
 interface PageProps {
   params: {
+    user: string;
     slug: string;
   };
 }
