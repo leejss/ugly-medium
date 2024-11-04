@@ -1,11 +1,10 @@
 "use server";
 
-export type ParagraphNode = {
-  lineNumber: number;
-  type: "paragraph";
-  text: string;
-};
+import { ContentNode } from "@/app/types";
 
-export async function publish(nodes: ParagraphNode[]) {
+export async function publish(nodes: ContentNode[]) {
+  // TODO: insert into database
   return { status: "published", nodes };
 }
+
+// user table and post table
