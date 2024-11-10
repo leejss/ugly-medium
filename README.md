@@ -1,9 +1,14 @@
-
 # Blog site
 
-## Different layout -> route group
+## TODOS
 
-## Algorigthm
+- Create user dialog
+- Making the reusable dialog component
 
-1. When enter, insert p node to next of the current node
-2. And move the caret to the inside p node
+## DEV
+
+### Authentication
+
+auth table
+
+### Table

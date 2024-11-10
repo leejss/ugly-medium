@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SignIn from "./components/sign-in";
 
 export default function PageNav() {
   return (
@@ -6,6 +7,9 @@ export default function PageNav() {
       <Link href={"/"}>Logo</Link>
       <div className="flex items-center gap-2">
         <Link href={"/write"}>Write</Link>
+        <div>
+          <SignIn />
+        </div>
         <div>Profile</div>
       </div>
     </nav>

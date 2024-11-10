@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import {} from "next/font/google";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   content: [
@@ -19,6 +19,27 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  // Adding custom components
+  plugins: [
+    plugin(function ({ addComponents, addUtilities }) {
+      addUtilities({
+        "._shadow-border": {
+          boxShadow: "0 0 0 1px black",
+        },
+      });
+      addComponents({
+        "._fc": {
+          display: "flex",
+          flexDirection: "column",
+        },
+
+        "._base-button": {
+          padding: "1rem 2rem",
+          border: "1px solid black",
+          fontWeight: "600",
+        },
+      });
+    }),
+  ],
 };
 export default config;

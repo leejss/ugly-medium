@@ -1,3 +1,11 @@
-import PageLayout from "./layout/page-layout";
-const Layout = PageLayout;
-export default Layout;
+import { PropsWithChildren } from "react";
+import PageNav from "./page-nav";
+
+export default function PageLayout({ children }: PropsWithChildren) {
+  return (
+    <>
+      <PageNav />
+      {children}
+    </>
+  );
+}
