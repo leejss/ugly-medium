@@ -1,5 +1,5 @@
 // import { createBrowserClient } from "../lib/supabase/client";
-import { createServerClient } from "../lib/supabase/server";
+import { createServerClient } from "../../lib/supabase/server";
 
 export type Post = {
   title: string;
@@ -26,7 +26,10 @@ export async function createPost(post: Post) {
 
 export async function updatePost(id: string, post: Post) {
   const supabase = createServerClient();
-  const { data, error } = await supabase.from("posts").update(post).eq("id", id);
+  const { data, error } = await supabase
+    .from("posts")
+    .update(post)
+    .eq("id", id);
   if (error) {
     throw error;
   }

@@ -1,6 +1,6 @@
 # Blog site
 
-## TODOS
+## TODO
 
 - Create user dialog
 - Making the reusable dialog component
@@ -9,6 +9,9 @@
 
 ### Authentication
 
-auth table
+- Sign up with email from scratch
+- How to store password to the database ?
 
 ### Table
+
+- users
