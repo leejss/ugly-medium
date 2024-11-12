@@ -1,5 +1,6 @@
 "use server";
 
+import { UserTable } from "@/db";
 import { Password } from "@/lib/utils";
 
 // 1. extract form data
@@ -21,7 +22,7 @@ export async function signUpAction({
     return { error: "Email and password are required" };
   }
 
-  const hashed = Password.hashPassword(password);
+  const hashed = await Password.hashPassword(password);
 
   // const { error } = await supabase.auth.signUp({
   //   email,
@@ -30,6 +31,9 @@ export async function signUpAction({
   //     emailRedirectTo: `${origin}/auth/callback`,
   //   },
   // });
+
+  const res = await UserTable.insertUser({ email, password: hashed });
+  return res;
 
   // if (error) {
   //   console.error(error.code + " " + error.message);

@@ -1,7 +1,13 @@
 "use client";
 
-import { ChangeEventHandler, useCallback, useState } from "react";
+import {
+  ChangeEventHandler,
+  FormEventHandler,
+  useCallback,
+  useState,
+} from "react";
 import AuthInput from "./auth-input";
+import { AuthAction } from "../actions";
 
 export default function SignUpForm() {
   const [formState, setFprmState] = useState({
@@ -16,6 +22,19 @@ export default function SignUpForm() {
     }));
   }, []);
 
+  const onSubmit: FormEventHandler = useCallback(
+    async (e) => {
+      e.preventDefault();
+      try {
+        const res = await AuthAction.signUpAction(formState);
+        console.log("Res", res);
+      } catch (error) {
+        console.error("Error", error);
+      }
+    },
+    [formState],
+  );
+
   return (
     <section className="_fc gap-4">
       <header className="_fc items-center">
@@ -24,12 +43,7 @@ export default function SignUpForm() {
           Enter your email address to create an account.
         </p>
       </header>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-        }}
-        className="_fc gap-4"
-      >
+      <form onSubmit={onSubmit} className="_fc gap-4">
         <div className="_fc items-center gap-2">
           <label htmlFor="">Your email</label>
           <AuthInput
@@ -47,6 +61,9 @@ export default function SignUpForm() {
             type="password"
             value={formState.password}
           />
+        </div>
+        <div>
+          <button type="submit">Submit</button>
         </div>
       </form>
     </section>

@@ -1,10 +1,9 @@
-import { pgTable, serial, text } from "drizzle-orm/pg-core";
-
-export const usersTable = pgTable("users_table", {
-  id: serial("id").primaryKey(),
-  email: text("email").notNull().unique(),
-  password: text("password").notNull(),
-});
+export * from "./users";
+// export const usersTable = pgTable("users_table", {
+//   id: serial("id").primaryKey(),
+//   email: text("email").notNull().unique(),
+//   password: text("password").notNull(),
+// });
 
 // export const postsTable = pgTable("posts_table", {
 //   id: serial("id").primaryKey(),
@@ -18,9 +17,6 @@ export const usersTable = pgTable("users_table", {
 //     .notNull()
 //     .$onUpdate(() => new Date()),
 // });
-
-export type InsertUser = typeof usersTable.$inferInsert;
-export type SelectUser = typeof usersTable.$inferSelect;
 
 // export type InsertPost = typeof postsTable.$inferInsert;
 // export type SelectPost = typeof postsTable.$inferSelect;
