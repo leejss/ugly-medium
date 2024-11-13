@@ -1,5 +1,6 @@
 import { pgTable, serial, text } from "drizzle-orm/pg-core";
 import { db } from ".";
+import { eq } from "drizzle-orm";
 
 export const usersTable = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -22,3 +23,16 @@ export async function insertUser(user: InsertUser) {
 
 // const newUser: NewUser = { name: "Alef" };
 // await insertUser(newUser);
+
+// await db.select().from(users).where(eq(users.id, 42));
+// await db.select().from(users).where(lt(users.id, 42));
+// await db.select().from(users).where(gte(users.id, 42));
+// await db.select().from(users).where(ne(users.id, 42));
+
+export async function selectUserByEmail(email: string) {
+  const users = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.email, email));
+  return users[0];
+}

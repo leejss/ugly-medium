@@ -1,14 +1,8 @@
 import Portal from "@/app/component/portal";
 import { useState } from "react";
-import SignUpForm from "./sign-up";
+import SignUpForm from "./sign-up-form";
 import { X } from "lucide-react";
-
-// Sturucture of the dialog
-
-// Dialog container
-// Overlay
-// Dialog
-// auth dialog has different views based on the state
+import SignInForm from "./sign-in-form";
 
 interface AuthDialogProps {
   onClose: () => void;
@@ -16,6 +10,7 @@ interface AuthDialogProps {
 
 const VIEW_STATES = {
   SIGN_IN: "SIGN_IN",
+  SIGN_IN_WITH_EMAIL: "SIGN_IN_WITH_EMAIL",
   CREATE_ACCOUNT: "CREATE_ACCOUNT",
   SIGN_UP: "SIGN_UP",
 } as const;
@@ -28,6 +23,17 @@ export default function AuthDialog({ onClose }: AuthDialogProps) {
     if (view === "SIGN_IN") {
       return (
         <div className="flex flex-col">
+          <div className="flex flex-col">
+            <button
+              className="_base-button rounded-full w-[300px]"
+              onClick={() => {
+                setView("SIGN_IN_WITH_EMAIL");
+              }}
+            >
+              Sign in with email
+            </button>
+          </div>
+
           <div className="flex gap-[1ch]">
             <span className="">No account?</span>
             <button
@@ -41,6 +47,10 @@ export default function AuthDialog({ onClose }: AuthDialogProps) {
           </div>
         </div>
       );
+    }
+
+    if (view === "SIGN_IN_WITH_EMAIL") {
+      return <SignInForm />;
     }
 
     if (view === "CREATE_ACCOUNT") {
