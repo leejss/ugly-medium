@@ -9,7 +9,11 @@ import {
 import AuthInput from "./auth-input";
 import { AuthAction } from "../actions";
 
-export default function SignUpForm() {
+interface EmailAuthFormProps {
+  type: "sign-in" | "sign-up";
+}
+
+export default function EmailAuthForm({ type }: EmailAuthFormProps) {
   const [formState, setFprmState] = useState({
     email: "",
     password: "",
@@ -26,21 +30,31 @@ export default function SignUpForm() {
     async (e) => {
       e.preventDefault();
       try {
-        const res = await AuthAction.signUpAction(formState);
-        console.log("Res", res);
+        if (type === "sign-in") {
+          const res = await AuthAction.signInAction(formState);
+          console.log("Res", res);
+        }
+
+        if (type === "sign-up") {
+          const res = await AuthAction.signUpAction(formState);
+          console.log("Res", res);
+        }
+
+        throw new Error("Invalid type");
       } catch (error) {
         console.error("Error", error);
       }
     },
-    [formState],
+    [formState, type],
   );
 
+  const title = type === "sign-in" ? "Sign in" : "Sign up";
   return (
     <section className="_fc gap-4">
       <header className="_fc items-center">
-        <h2 className="text-3xl text-center font-bold">Sign up with email</h2>
+        <h2 className="text-3xl text-center font-bold">{title} with email</h2>
         <p className="text-xl text-center">
-          Enter your email address to create an account.
+          Enter your email address and password to sign in.
         </p>
       </header>
       <form onSubmit={onSubmit} className="_fc gap-4">

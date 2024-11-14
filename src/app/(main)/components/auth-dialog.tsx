@@ -1,8 +1,7 @@
 import Portal from "@/app/component/portal";
 import { useState } from "react";
-import SignUpForm from "./sign-up-form";
 import { X } from "lucide-react";
-import SignInForm from "./sign-in-form";
+import EmailAuthForm from "./email-auth-form";
 
 interface AuthDialogProps {
   onClose: () => void;
@@ -50,7 +49,7 @@ export default function AuthDialog({ onClose }: AuthDialogProps) {
     }
 
     if (view === "SIGN_IN_WITH_EMAIL") {
-      return <SignInForm />;
+      return <EmailAuthForm type="sign-in" />;
     }
 
     if (view === "CREATE_ACCOUNT") {
@@ -82,7 +81,7 @@ export default function AuthDialog({ onClose }: AuthDialogProps) {
     }
 
     if (view === "SIGN_UP") {
-      return <SignUpForm />;
+      return <EmailAuthForm type="sign-up" />;
     }
 
     throw new Error("Invalid view state");
