@@ -54,7 +54,7 @@ export default function EmailAuthForm({ type }: EmailAuthFormProps) {
       <header className="_fc items-center">
         <h2 className="text-3xl text-center font-bold">{title} with email</h2>
         <p className="text-xl text-center">
-          Enter your email address and password to sign in.
+          Enter your email address and password to {type.toLowerCase()}
         </p>
       </header>
       <form onSubmit={onSubmit} className="_fc gap-4">
