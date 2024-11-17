@@ -1,7 +1,7 @@
 "use server";
 
 import { UserTable } from "@/db";
-import { Password } from "@/lib/utils";
+import { hashPassword, verifyPassword } from "@/lib/utils/password";
 
 type AuthFormInput = {
   email: string;
@@ -13,7 +13,7 @@ export async function signUpAction({ email, password }: AuthFormInput) {
     if (!email || !password) {
       return { error: "Email and password are required" };
     }
-    const hashed = await Password.hashPassword(password);
+    const hashed = await hashPassword(password);
     const res = await UserTable.insertUser({ email, password: hashed });
     return res;
   } catch (error) {
@@ -30,7 +30,7 @@ export async function signInAction({ email, password }: AuthFormInput) {
       return { error: "Email not found" };
     }
 
-    const isValid = await Password.verifyPassword(password, user.password);
+    const isValid = await verifyPassword(password, user.password);
 
     if (!isValid) {
       return { error: "Password is incorrect" };

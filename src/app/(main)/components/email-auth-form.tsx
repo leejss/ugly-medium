@@ -8,6 +8,7 @@ import {
 } from "react";
 import AuthInput from "./auth-input";
 import { AuthAction } from "../actions";
+import BaseButton from "@/components/base-button";
 
 interface EmailAuthFormProps {
   type: "sign-in" | "sign-up";
@@ -76,8 +77,8 @@ export default function EmailAuthForm({ type }: EmailAuthFormProps) {
             value={formState.password}
           />
         </div>
-        <div>
-          <button type="submit">Submit</button>
+        <div className="flex justify-center">
+          <BaseButton type="submit">Submit</BaseButton>
         </div>
       </form>
     </section>
