@@ -15,3 +15,7 @@
 ### Table
 
 - users
+
+### Notes
+
+- session table
