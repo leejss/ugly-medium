@@ -19,3 +19,5 @@
 ### Notes
 
 - session table
+- way to update db schema
+

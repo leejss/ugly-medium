@@ -1,7 +1,9 @@
 "use server";
 
 import { UserTable } from "@/db";
+import { createSession, generateSessionToken } from "@/lib/session";
 import { hashPassword, verifyPassword } from "@/lib/utils/password";
+import { cookies } from "next/headers";
 
 type AuthFormInput = {
   email: string;
@@ -35,6 +37,10 @@ export async function signInAction({ email, password }: AuthFormInput) {
     if (!isValid) {
       return { error: "Password is incorrect" };
     }
+
+    const token = generateSessionToken();
+    await createSession(token, user.id);
+    cookies().set("session_token", token);
     return user;
   } catch (error) {
     console.error("Fail:signInAction", error);

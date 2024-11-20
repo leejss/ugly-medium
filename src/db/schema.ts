@@ -1,4 +1,6 @@
 export * from "./users";
+export * from "./session";
+
 // export const usersTable = pgTable("users_table", {
 //   id: serial("id").primaryKey(),
 //   email: text("email").notNull().unique(),
