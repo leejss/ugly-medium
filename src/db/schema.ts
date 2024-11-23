@@ -1,5 +1,5 @@
-export * from "./users";
-export * from "./session";
+export * from "./tables/users";
+export * from "./tables/session";
 
 // export const usersTable = pgTable("users_table", {
 //   id: serial("id").primaryKey(),

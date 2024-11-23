@@ -1,5 +1,5 @@
 import { pgTable, serial, text } from "drizzle-orm/pg-core";
-import { db } from ".";
+import { db } from "..";
 import { eq } from "drizzle-orm";
 
 export const usersTable = pgTable("users", {
