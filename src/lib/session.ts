@@ -1,6 +1,6 @@
 import { db } from "@/db";
-import { sessionTable } from "@/db/tables/session";
-import { usersTable } from "@/db/tables/users";
+import { SelectSession, sessionTable } from "@/db/tables/session";
+import { SelectUser, usersTable } from "@/db/tables/users";
 import { sha256 } from "@oslojs/crypto/sha2";
 import {
   encodeBase32LowerCaseNoPadding,
@@ -24,11 +24,6 @@ export function generateSessionToken(): string {
   const token = encodeBase32LowerCaseNoPadding(bytes); // encode as base32
   return token;
 }
-
-// 세션 토큰을 생성한다.
-// 그리고 토큰으로 세션 아이디를 생성한다.
-// 세션 테이블에는 세션 아이디, 유저 아이디, 만료 시간이 저장된다.
-// 세션 아이디를 토큰을 통해 생성하는 이유는?
 
 export async function createSession(token: string, userId: number) {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
@@ -87,6 +82,7 @@ export async function invalidateSession(sessionId: string) {
   await db.delete(sessionTable).where(eq(sessionTable.id, sessionId));
 }
 
-export type SesssionValidationResult = Awaited<
-  ReturnType<typeof validateSessionToken>
->;
+export type SessionData = {
+  session: SelectSession;
+  user: SelectUser;
+};

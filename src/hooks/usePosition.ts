@@ -1,8 +1,8 @@
 import { useEffect, useState, type RefObject } from "react";
 
 type Position = { top: number; left: number };
-type PositionSide = "top" | "right" | "bottom" | "left";
-type PositionAlign = "start" | "center" | "end";
+export type PositionSide = "top" | "right" | "bottom" | "left";
+export type PositionAlign = "start" | "center" | "end";
 
 interface UsePositionProps {
   baseRef: RefObject<HTMLElement>;
@@ -26,8 +26,8 @@ export default function usePosition({
     const updatePos = () => {
       // ! Refs are assigned when the element are mounted
       // ! -> check `open` state to ensure the element is mounted
-      if (!baseRef.current || !targetRef.current || !open) return;
-
+      // if (!baseRef.current || !targetRef.current || !open) return;
+      if (!baseRef.current || !targetRef.current) return;
       const baseRect = baseRef.current.getBoundingClientRect();
       const targetRect = targetRef.current.getBoundingClientRect();
 

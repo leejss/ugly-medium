@@ -2,20 +2,25 @@ import { createPortal } from "react-dom";
 import { usePopover } from "./popover.ctx";
 import { ReactNode, useEffect } from "react";
 import usePosition from "@/hooks/usePosition";
+import { cn } from "@/lib/utils";
 
 interface PopoverContentProps {
   children: ReactNode;
   className?: string;
+  sideOffset?: number;
 }
 
 export default function PopoverContent({
   children,
   className,
+  sideOffset = 5,
 }: PopoverContentProps) {
   const { open, setOpen, triggerRef, contentRef } = usePopover();
   const pos = usePosition({
     baseRef: triggerRef,
     targetRef: contentRef,
+    sideOffset,
+    align: "end",
     open,
   });
 
@@ -52,18 +57,21 @@ export default function PopoverContent({
   const content = (
     <div
       ref={contentRef}
-      className={className}
+      className={cn("", className)}
+      role="tooltip"
       style={{
         position: "fixed",
         top: `${pos.top}px`,
         left: `${pos.left}px`,
       }}
-      role="tooltip"
     >
       {children}
     </div>
   );
 
-  if (!open) return null;
+  if (!open) {
+    return null;
+  }
+
   return createPortal(content, document.body);
 }
