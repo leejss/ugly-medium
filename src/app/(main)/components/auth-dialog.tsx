@@ -12,28 +12,32 @@ const VIEW_STATES = {
   SIGN_IN_WITH_EMAIL: "SIGN_IN_WITH_EMAIL",
   CREATE_ACCOUNT: "CREATE_ACCOUNT",
   SIGN_UP: "SIGN_UP",
-} as const;
+};
 
 export default function AuthDialog({ onClose }: AuthDialogProps) {
-  const [view, setView] = useState<keyof typeof VIEW_STATES>(
-    VIEW_STATES["SIGN_IN"],
-  );
+  const [view, setView] = useState<string>(VIEW_STATES["SIGN_IN"]);
   const renderView = () => {
     if (view === "SIGN_IN") {
       return (
-        <div className="flex flex-col">
-          <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
             <button
               className="_base-button rounded-full w-[300px]"
               onClick={() => {
-                setView("SIGN_IN_WITH_EMAIL");
+                setView(`SIGN_IN_WITH_EMAIL`);
               }}
             >
               Sign in with email
             </button>
+            <a
+              className="_base-button text-center rounded-full w-[300px]"
+              href="/login/gitbub"
+            >
+              Sign in with github
+            </a>
           </div>
 
-          <div className="flex gap-[1ch]">
+          <div className="flex gap-[1ch] justify-center">
             <span className="">No account?</span>
             <button
               className="text-green-600 font-bold"
@@ -81,7 +85,11 @@ export default function AuthDialog({ onClose }: AuthDialogProps) {
     }
 
     if (view === "SIGN_UP") {
-      return <EmailAuthForm type="sign-up" />;
+      return (
+        <div>
+          <EmailAuthForm type="sign-up" />
+        </div>
+      );
     }
 
     throw new Error("Invalid view state");

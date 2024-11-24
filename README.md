@@ -26,3 +26,7 @@
   - popover trigger
   - popover content
   - center of the trigger
+
+- auth provider
+  - email and password
+  - github
