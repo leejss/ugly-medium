@@ -2,6 +2,7 @@ import Link from "next/link";
 import SignIn from "./components/sign-in";
 import { getSessionFromCookie, validateSessionToken } from "@/lib/session";
 import Signout from "./components/sign-out";
+import ProfilePopover from "./components/profile-popover";
 
 export default async function PageNav() {
   const token = getSessionFromCookie();
@@ -14,7 +15,7 @@ export default async function PageNav() {
           {sessionData && token ? (
             <div className="flex items-center gap-3">
               <Link href={"/write"}>Write</Link>
-              {/* <Link href={"/profile"}>Profile</Link> */}
+              <ProfilePopover />
               <Signout sessionId={sessionData.session.id} />
             </div>
           ) : (

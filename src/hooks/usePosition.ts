@@ -10,6 +10,7 @@ interface UsePositionProps {
   side?: PositionSide;
   align?: PositionAlign;
   sideOffset?: number;
+  open: boolean;
 }
 
 export default function usePosition({
@@ -18,11 +19,14 @@ export default function usePosition({
   side = "bottom",
   align = "center",
   sideOffset = 5,
+  open,
 }: UsePositionProps) {
   const [pos, setPos] = useState<Position>({ top: 0, left: 0 });
   useEffect(() => {
     const updatePos = () => {
-      if (!baseRef.current || !targetRef.current) return;
+      // ! Refs are assigned when the element are mounted
+      // ! -> check `open` state to ensure the element is mounted
+      if (!baseRef.current || !targetRef.current || !open) return;
 
       const baseRect = baseRef.current.getBoundingClientRect();
       const targetRect = targetRef.current.getBoundingClientRect();
@@ -83,7 +87,7 @@ export default function usePosition({
       window.removeEventListener("resize", updatePos);
       window.removeEventListener("scroll", updatePos);
     };
-  }, [baseRef, targetRef, side, align, sideOffset, setPos]);
+  }, [baseRef, targetRef, side, align, sideOffset, setPos, open]);
 
   return pos;
 }
