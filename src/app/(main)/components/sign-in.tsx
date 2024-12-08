@@ -6,7 +6,6 @@ import AuthDialog from "./auth-dialog";
 export default function SignIn() {
   const [isOpen, setIsOpen] = useState(false);
   const onClickSignIn = () => {
-    // Rnder auth dialog
     setIsOpen(true);
   };
 

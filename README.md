@@ -1,20 +1,11 @@
 # Blog site
 
-## TODO
-
-- Create user dialog
-- Making the reusable dialog component
-
 ## DEV
 
 ### Authentication
 
 - Sign up with email from scratch
 - How to store password to the database ?
-
-### Table
-
-- users
 
 ### Notes
 
@@ -30,3 +21,11 @@
 - auth provider
   - email and password
   - github
+
+- How to apply the changes of schema with drizzle orm ?
+  - db migration
+  - version control of database schema
+  - tracking database schema changes
+  - providing the way to rollback the schema changes
+
+- How to store github user to my own db? schema design

@@ -31,7 +31,7 @@ export default function AuthDialog({ onClose }: AuthDialogProps) {
             </button>
             <a
               className="_base-button text-center rounded-full w-[300px]"
-              href="/login/gitbub"
+              href="/api/login/github"
             >
               Sign in with github
             </a>

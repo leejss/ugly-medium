@@ -15,6 +15,13 @@
       "when": 1732115665073,
       "tag": "0001_rapid_ma_gnuci",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1732618580953,
+      "tag": "0002_open_the_initiative",
+      "breakpoints": true
     }
   ]
 }
