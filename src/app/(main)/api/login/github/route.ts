@@ -6,12 +6,14 @@ export async function GET() {
   // Prevent CSRF attacks
   // Ensuring the request originated from my application
   const state = generateState();
-  const url = github.createAuthorizationURL(state, []);
+
+  // create the authorization URL with state and scopes
+  // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
+  const url = github.createAuthorizationURL(state, ["read:user"]);
   const cookieStore = cookies();
 
-  // store the state in the cookie
-  // why ? to verify the state when the user is redirected back to the app
-
+  // store the state in the cookie - it prevents CSRF attacks
+  // State value in cookie guarantees that the request originated from my application
   cookieStore.set("github_oauth_state", state, {
     path: "/",
     secure: process.env.NODE_ENV === "production",
@@ -23,7 +25,7 @@ export async function GET() {
   return new Response(null, {
     status: 302,
     headers: {
-      // Redirect to the
+      // Redirect to the GitHub authorization URL
       Location: url.toString(),
     },
   });

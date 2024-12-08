@@ -1,5 +1,5 @@
 import { AuthTable, UsersTable } from "@/db";
-import { github } from "@/lib/oauth";
+import { github, requestGithubUser } from "@/lib/oauth";
 import { createSession, generateSessionToken, sessionCookieName } from "@/lib/session";
 import { OAuth2Tokens } from "arctic";
 import { cookies } from "next/headers";
@@ -13,7 +13,6 @@ export async function GET(request: Request) {
     // Verify state from cookie matches state in URL
     const cookieStore = cookies();
     const storedState = cookieStore.get("github_oauth_state")?.value;
-    // cookieStore.delete("github_oauth_state");
 
     if (!code || !state || !storedState || state !== storedState) {
       return new Response(null, {
@@ -41,17 +40,7 @@ export async function GET(request: Request) {
       // scope: tokens.scopes().join(" "),
     };
 
-    // Get GitHub user info using access token
-    const githubUser = await fetch("https://api.github.com/user", {
-      headers: {
-        Authorization: `Bearer ${tokenData.accessToken}`,
-      },
-    })
-      .then((res) => res.json())
-      .catch((error) => {
-        console.error("GitHub User Info Error:", error);
-        throw error;
-      });
+    const githubUser = await requestGithubUser(tokenData.accessToken);
 
     if (!githubUser) {
       return new Response(null, {
@@ -72,7 +61,6 @@ export async function GET(request: Request) {
 
     // Check if auth record exists
     const existingAuth = await AuthTable.selectAuthByUserId(user.id);
-
     if (existingAuth) {
       await AuthTable.updateAuth(existingAuth.id, tokenData);
     } else {
@@ -105,7 +93,7 @@ export async function GET(request: Request) {
       },
     });
   } catch (error) {
-    console.error("GitHub OAuth Error:", error);
+    console.error("[GitHub OAuth Callback] Error:", error);
     return new Response(null, {
       status: 500,
       statusText: "Internal Server Error",
