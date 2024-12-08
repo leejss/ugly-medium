@@ -1,11 +1,13 @@
 import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core";
 import { usersTable } from "./users";
+import { db } from "..";
 
 export const authTable = pgTable("auth", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: uuid("user_id")
     .notNull()
     .references(() => usersTable.id, { onDelete: "cascade" }),
+
   type: text("type", {
     enum: ["email", "oauth"],
   }).notNull(),
@@ -28,3 +30,12 @@ export const authTable = pgTable("auth", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+// CRUD operations
+
+export async function insertAuth(auth: InsertAuth) {
+  const result = await db.insert(authTable).values(auth).returning();
+  return result[0];
+}
+
+export type InsertAuth = typeof authTable.$inferInsert;

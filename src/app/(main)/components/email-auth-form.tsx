@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  ChangeEventHandler,
-  FormEventHandler,
-  useCallback,
-  useState,
-} from "react";
+import { ChangeEventHandler, FormEventHandler, useCallback, useState } from "react";
 import AuthInput from "./auth-input";
 import { AuthAction } from "../actions";
 import BaseButton from "@/components/base-button";
@@ -32,15 +27,11 @@ export default function EmailAuthForm({ type }: EmailAuthFormProps) {
       e.preventDefault();
       try {
         if (type === "sign-in") {
-          const res = await AuthAction.signInAction(formState);
-          console.log("Res", res);
+          await AuthAction.signInAction(formState);
         }
-
         if (type === "sign-up") {
-          const res = await AuthAction.signUpAction(formState);
-          console.log("Res", res);
+          await AuthAction.signUpAction(formState);
         }
-
         throw new Error("Invalid type");
       } catch (error) {
         console.error("Error", error);
@@ -54,28 +45,16 @@ export default function EmailAuthForm({ type }: EmailAuthFormProps) {
     <section className="_fc gap-4">
       <header className="_fc items-center">
         <h2 className="text-3xl text-center font-bold">{title} with email</h2>
-        <p className="text-xl text-center">
-          Enter your email address and password to {type.toLowerCase()}
-        </p>
+        <p className="text-xl text-center">Enter your email address and password to {type.toLowerCase()}</p>
       </header>
       <form onSubmit={onSubmit} className="_fc gap-4">
         <div className="_fc items-center gap-2">
           <label htmlFor="">Your email</label>
-          <AuthInput
-            onChange={onChange}
-            name="email"
-            value={formState.email}
-            type="email"
-          />
+          <AuthInput onChange={onChange} name="email" value={formState.email} type="email" />
         </div>
         <div className="_fc items-center gap-2">
           <label htmlFor="">Password</label>
-          <AuthInput
-            onChange={onChange}
-            name="password"
-            type="password"
-            value={formState.password}
-          />
+          <AuthInput onChange={onChange} name="password" type="password" value={formState.password} />
         </div>
         <div className="flex justify-center">
           <BaseButton type="submit">Submit</BaseButton>

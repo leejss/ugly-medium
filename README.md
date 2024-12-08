@@ -29,3 +29,8 @@
   - providing the way to rollback the schema changes
 
 - How to store github user to my own db? schema design
+
+### Drizzle ORM
+
+- CRUD 함수 구현하기
+- 타입 추론 사용하기

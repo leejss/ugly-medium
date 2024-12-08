@@ -1,6 +1,6 @@
 "use client";
 
-import { signOutAction } from "../actions/auth-action";
+import { signOutAction } from "../actions/email-auth-action";
 
 interface SignoutProps {
   sessionId: string;

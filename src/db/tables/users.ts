@@ -11,7 +11,8 @@ export const usersTable = pgTable("users", {
 });
 
 export async function insertUser(user: InsertUser) {
-  return await db.insert(usersTable).values(user).returning();
+  const result = await db.insert(usersTable).values(user).returning();
+  return result[0];
 }
 
 export async function selectUserByEmail(email: string) {

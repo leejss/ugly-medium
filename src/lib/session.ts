@@ -2,10 +2,7 @@ import { db } from "@/db";
 import { SelectSession, sessionTable } from "@/db/tables/session";
 import { SelectUser, usersTable } from "@/db/tables/users";
 import { sha256 } from "@oslojs/crypto/sha2";
-import {
-  encodeBase32LowerCaseNoPadding,
-  encodeHexLowerCase,
-} from "@oslojs/encoding";
+import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 
@@ -25,7 +22,7 @@ export function generateSessionToken(): string {
   return token;
 }
 
-export async function createSession(token: string, userId: number) {
+export async function createSession(token: string, userId: string) {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const session = {
     id: sessionId,
@@ -58,10 +55,7 @@ export async function validateSessionToken(token: string) {
   if (now > session.expiresAt.getTime() - FIFTEEN_DAYS_IN_MS) {
     const newExpiresAt = new Date(now + THIRTY_DAYS_IN_MS);
     session.expiresAt = newExpiresAt;
-    await db
-      .update(sessionTable)
-      .set({ expiresAt: newExpiresAt })
-      .where(eq(sessionTable.id, sessionId));
+    await db.update(sessionTable).set({ expiresAt: newExpiresAt }).where(eq(sessionTable.id, sessionId));
   }
 
   return { session, user };

@@ -1,27 +1,32 @@
 "use server";
 
-import { UserTable } from "@/db";
-import {
-  createSession,
-  generateSessionToken,
-  invalidateSession,
-  sessionCookieName,
-} from "@/lib/session";
+import { AuthTable, UserTable } from "@/db";
+import { createSession, generateSessionToken, invalidateSession, sessionCookieName } from "@/lib/session";
 import { hashPassword, verifyPassword } from "@/lib/utils/password";
 import { cookies } from "next/headers";
+
+// email auth actions
 
 type AuthFormInput = {
   email: string;
   password: string;
 };
 
+// Create a new user
 export async function signUpAction({ email, password }: AuthFormInput) {
   try {
     if (!email || !password) {
       return { error: "Email and password are required" };
     }
+    // Check if the user already exists
+    const user = await UserTable.selectUserByEmail(email);
+    if (user) {
+      return { error: "User already exists" };
+    }
     const hashed = await hashPassword(password);
-    const res = await UserTable.insertUser({ email, password: hashed });
+    const res = await UserTable.insertUser({ email, hashedPassword: hashed });
+    // insert auth record
+    await AuthTable.insertAuth({ userId: res.id, type: "email" });
     return res;
   } catch (error) {
     console.error("Fail:signUpAction", error);
@@ -37,12 +42,11 @@ export async function signInAction({ email, password }: AuthFormInput) {
       return { error: "Email not found" };
     }
 
-    const isValid = await verifyPassword(password, user.password);
+    const isValid = await verifyPassword(password, user.hashedPassword);
 
     if (!isValid) {
       return { error: "Password is incorrect" };
     }
-
     // Create a new session
     const token = generateSessionToken();
     await createSession(token, user.id);
