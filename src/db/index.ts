@@ -7,6 +7,6 @@ const client = postgres(process.env.DATABASE_URL!);
 
 export const db = drizzle({ client });
 // export all tables
-export * as UserTable from "./tables/users";
+export * as UsersTable from "./tables/users";
 export * as AuthTable from "./tables/auth";
 export * as SessionTable from "./tables/session";

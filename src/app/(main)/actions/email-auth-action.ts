@@ -1,6 +1,6 @@
 "use server";
 
-import { AuthTable, UserTable } from "@/db";
+import { AuthTable, UsersTable } from "@/db";
 import { createSession, generateSessionToken, invalidateSession, sessionCookieName } from "@/lib/session";
 import { hashPassword, verifyPassword } from "@/lib/utils/password";
 import { cookies } from "next/headers";
@@ -19,12 +19,12 @@ export async function signUpAction({ email, password }: AuthFormInput) {
       return { error: "Email and password are required" };
     }
     // Check if the user already exists
-    const user = await UserTable.selectUserByEmail(email);
+    const user = await UsersTable.selectUserByEmail(email);
     if (user) {
       return { error: "User already exists" };
     }
     const hashed = await hashPassword(password);
-    const res = await UserTable.insertUser({ email, hashedPassword: hashed });
+    const res = await UsersTable.insertUser({ email, hashedPassword: hashed });
     // insert auth record
     await AuthTable.insertAuth({ userId: res.id, type: "email" });
     return res;
@@ -36,7 +36,7 @@ export async function signUpAction({ email, password }: AuthFormInput) {
 
 export async function signInAction({ email, password }: AuthFormInput) {
   try {
-    const user = await UserTable.selectUserByEmail(email);
+    const user = await UsersTable.selectUserByEmail(email);
 
     if (!user) {
       return { error: "Email not found" };
