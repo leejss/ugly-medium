@@ -3,7 +3,7 @@
 import { ChangeEventHandler, FormEventHandler, useCallback, useState } from "react"
 import AuthInput from "./auth-input"
 import { AuthAction } from "../actions"
-import BaseButton from "@/components/base-button"
+import Button from "@/components/base-button"
 
 interface EmailAuthFormProps {
   type: "sign-in" | "sign-up"
@@ -64,7 +64,7 @@ export default function EmailAuthForm({ type }: EmailAuthFormProps) {
           />
         </div>
         <div className="flex justify-center">
-          <BaseButton type="submit">Submit</BaseButton>
+          <Button type="submit">Submit</Button>
         </div>
       </form>
     </section>

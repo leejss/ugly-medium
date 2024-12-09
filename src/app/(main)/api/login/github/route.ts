@@ -9,7 +9,7 @@ export async function GET() {
 
   // create the authorization URL with state and scopes
   // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
-  const url = github.createAuthorizationURL(state, ["read:user"])
+  const url = github.createAuthorizationURL(state, [])
   const cookieStore = cookies()
 
   // store the state in the cookie - it prevents CSRF attacks

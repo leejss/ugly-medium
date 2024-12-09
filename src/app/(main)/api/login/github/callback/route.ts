@@ -24,6 +24,7 @@ export async function GET(request: Request) {
     // Exchange code for access token
     let tokens: OAuth2Tokens
     try {
+      // 토큰 요청
       tokens = await github.validateAuthorizationCode(code)
     } catch (error) {
       console.error("GitHub OAuth Token Error:", error)
