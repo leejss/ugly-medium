@@ -1,13 +1,13 @@
-import { getSessionFromCookie, validateSessionToken } from "@/lib/session";
-import Link from "next/link";
-import ProfilePopover from "./components/profile-popover";
-import SignIn from "./components/sign-in";
+import { getSessionFromCookie, validateSessionToken } from "@/lib/session"
+import Link from "next/link"
+import ProfilePopover from "./components/profile-popover"
+import SignIn from "./components/sign-in"
 
 export default async function PageNav() {
-  const token = getSessionFromCookie();
-  const sessionData = token ? await validateSessionToken(token) : null;
+  const token = getSessionFromCookie()
+  const sessionData = token ? await validateSessionToken(token) : null
   return (
-    <nav className="h-12 flex justify-between items-center px-4 border-b">
+    <nav className="flex h-12 items-center justify-between border-b px-4">
       <Link href={"/"}>Logo</Link>
       <div className="flex items-center gap-2">
         <>
@@ -24,5 +24,5 @@ export default async function PageNav() {
         </>
       </div>
     </nav>
-  );
+  )
 }

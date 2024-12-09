@@ -1,3 +1,3 @@
-export * from "./tables/users";
-export * from "./tables/session";
-export * from "./tables/auth";
+export * from "./tables/users"
+export * from "./tables/session"
+export * from "./tables/auth"

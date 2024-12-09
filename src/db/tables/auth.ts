@@ -1,7 +1,7 @@
-import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core";
-import { usersTable } from "./users";
-import { db } from "..";
-import { eq } from "drizzle-orm";
+import { pgTable, uuid, text, timestamp } from "drizzle-orm/pg-core"
+import { usersTable } from "./users"
+import { db } from ".."
+import { eq } from "drizzle-orm"
 
 export const authTable = pgTable("auth", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -30,28 +30,26 @@ export const authTable = pgTable("auth", {
   // common fields
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-// CRUD operations
+})
 
 export async function insertAuth(auth: InsertAuth) {
-  const result = await db.insert(authTable).values(auth).returning();
-  return result[0];
+  const result = await db.insert(authTable).values(auth).returning()
+  return result[0]
 }
 
 // Update auth record
 export async function updateAuth(
   id: string,
   auth: {
-    accessToken?: string;
-    refreshToken?: string;
-    expiresAt?: Date;
-    tokenType?: string;
-    scope?: string;
+    accessToken?: string
+    refreshToken?: string
+    expiresAt?: Date
+    tokenType?: string
+    scope?: string
   },
 ) {
-  const result = await db.update(authTable).set(auth).where(eq(authTable.id, id)).returning();
-  return result[0];
+  const result = await db.update(authTable).set(auth).where(eq(authTable.id, id)).returning()
+  return result[0]
 }
 
 export async function selectAuthByUserId(userId: string) {
@@ -60,10 +58,10 @@ export async function selectAuthByUserId(userId: string) {
     .from(authTable)
     .where(eq(authTable.userId, userId))
     .limit(1)
-    .then((rows) => rows[0]);
+    .then((rows) => rows[0])
 
-  return result;
+  return result
 }
 
-export type InsertAuth = typeof authTable.$inferInsert;
-export type SelectAuth = typeof authTable.$inferSelect;
+export type InsertAuth = typeof authTable.$inferInsert
+export type SelectAuth = typeof authTable.$inferSelect

@@ -1,5 +1,5 @@
-import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { usersTable } from "./users";
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core"
+import { usersTable } from "./users"
 
 export const sessionTable = pgTable("session", {
   id: text("id").primaryKey(),
@@ -11,6 +11,6 @@ export const sessionTable = pgTable("session", {
   expiresAt: timestamp("expires_at").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+})
 
-export type SelectSession = typeof sessionTable.$inferSelect;
+export type SelectSession = typeof sessionTable.$inferSelect

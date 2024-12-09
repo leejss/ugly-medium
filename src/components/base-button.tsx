@@ -1,41 +1,33 @@
-"use client";
+"use client"
 
-import { cn } from "@/lib/utils";
-import { ComponentProps, useState } from "react";
+import { cn } from "@/lib/utils"
+import { ComponentProps, useState } from "react"
 
 interface BaseButtonProps extends ComponentProps<"button"> {
-  variant?: "primary" | "secondary";
-  onClick?: () => void;
+  variant?: "primary" | "secondary"
+  onClick?: () => void
 }
 
-export default function BaseButton({
-  className,
-  onClick,
-  children,
-  ...props
-}: BaseButtonProps) {
-  const [loading, setLoading] = useState(false);
+export default function BaseButton({ className, onClick, children, ...props }: BaseButtonProps) {
+  const [loading, setLoading] = useState(false)
   const handleClick = () => {
     try {
-      setLoading(true);
-      onClick?.();
+      setLoading(true)
+      onClick?.()
     } catch (error) {
-      console.error("Error", error);
-      throw error;
+      console.error("Error", error)
+      throw error
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
   return (
     <button
       onClick={handleClick}
-      className={cn(
-        "bg-green-700 text-white px-4 py-2 rounded-full",
-        className,
-      )}
+      className={cn("rounded-full bg-green-700 px-4 py-2 text-white", className)}
       {...props}
     >
       {loading ? "Loading..." : children}
     </button>
-  );
+  )
 }

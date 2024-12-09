@@ -1,16 +1,16 @@
-import { github } from "@/lib/oauth";
-import { generateState } from "arctic";
-import { cookies } from "next/headers";
+import { github } from "@/lib/oauth"
+import { generateState } from "arctic"
+import { cookies } from "next/headers"
 
 export async function GET() {
   // Prevent CSRF attacks
   // Ensuring the request originated from my application
-  const state = generateState();
+  const state = generateState()
 
   // create the authorization URL with state and scopes
   // https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/scopes-for-oauth-apps
-  const url = github.createAuthorizationURL(state, ["read:user"]);
-  const cookieStore = cookies();
+  const url = github.createAuthorizationURL(state, ["read:user"])
+  const cookieStore = cookies()
 
   // store the state in the cookie - it prevents CSRF attacks
   // State value in cookie guarantees that the request originated from my application
@@ -20,7 +20,7 @@ export async function GET() {
     httpOnly: true,
     maxAge: 60 * 10,
     sameSite: "lax",
-  });
+  })
 
   return new Response(null, {
     status: 302,
@@ -28,5 +28,5 @@ export async function GET() {
       // Redirect to the GitHub authorization URL
       Location: url.toString(),
     },
-  });
+  })
 }

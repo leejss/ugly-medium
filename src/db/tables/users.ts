@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
-import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import { db } from "..";
+import { eq } from "drizzle-orm"
+import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core"
+import { db } from ".."
 
 export const usersTable = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -8,17 +8,17 @@ export const usersTable = pgTable("users", {
   hashedPassword: text("hashed_password").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+})
 
 export async function insertUser(user: InsertUser) {
-  const result = await db.insert(usersTable).values(user).returning();
-  return result[0];
+  const result = await db.insert(usersTable).values(user).returning()
+  return result[0]
 }
 
 export async function selectUserByEmail(email: string) {
-  const users = await db.select().from(usersTable).where(eq(usersTable.email, email));
-  return users[0];
+  const users = await db.select().from(usersTable).where(eq(usersTable.email, email))
+  return users[0]
 }
 
-export type InsertUser = typeof usersTable.$inferInsert;
-export type SelectUser = typeof usersTable.$inferSelect;
+export type InsertUser = typeof usersTable.$inferInsert
+export type SelectUser = typeof usersTable.$inferSelect

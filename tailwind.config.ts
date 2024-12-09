@@ -1,5 +1,5 @@
-import type { Config } from "tailwindcss";
-import plugin from "tailwindcss/plugin";
+import type { Config } from "tailwindcss"
+import plugin from "tailwindcss/plugin"
 
 const config: Config = {
   content: [
@@ -26,7 +26,7 @@ const config: Config = {
         "._shadow-border": {
           boxShadow: "0 0 0 1px black",
         },
-      });
+      })
       addComponents({
         "._fc": {
           display: "flex",
@@ -38,8 +38,8 @@ const config: Config = {
           border: "1px solid black",
           fontWeight: "600",
         },
-      });
+      })
     }),
   ],
-};
-export default config;
+}
+export default config

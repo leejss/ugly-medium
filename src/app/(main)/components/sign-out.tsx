@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { signOutAction } from "../actions/email-auth-action";
+import { signOutAction } from "../actions/email-auth-action"
 
 interface SignoutProps {
-  sessionId: string;
+  sessionId: string
 }
 
 export default function Signout({ sessionId }: SignoutProps) {
@@ -11,11 +11,11 @@ export default function Signout({ sessionId }: SignoutProps) {
     <div>
       <button
         onClick={async () => {
-          await signOutAction(sessionId);
+          await signOutAction(sessionId)
         }}
       >
         Sign out
       </button>
     </div>
-  );
+  )
 }

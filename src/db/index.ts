@@ -1,12 +1,12 @@
-import { config } from "dotenv";
-import { drizzle } from "drizzle-orm/postgres-js";
-import postgres from "postgres";
+import { config } from "dotenv"
+import { drizzle } from "drizzle-orm/postgres-js"
+import postgres from "postgres"
 
-config({ path: ".env" }); // or .env.local
-const client = postgres(process.env.DATABASE_URL!);
+config({ path: ".env" }) // or .env.local
+const client = postgres(process.env.DATABASE_URL!)
 
-export const db = drizzle({ client });
+export const db = drizzle({ client })
 // export all tables
-export * as UsersTable from "./tables/users";
-export * as AuthTable from "./tables/auth";
-export * as SessionTable from "./tables/session";
+export * as UsersTable from "./tables/users"
+export * as AuthTable from "./tables/auth"
+export * as SessionTable from "./tables/session"

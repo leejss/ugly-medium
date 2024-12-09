@@ -1,8 +1,12 @@
-import { GitHub } from "arctic";
+import { GitHub } from "arctic"
 
-const githubUserEndpoint = "https://api.github.com/user";
+const githubUserEndpoint = "https://api.github.com/user"
 
-export const github = new GitHub(process.env.GITHUB_CLIENT_ID!, process.env.GITHUB_CLIENT_SECRET!, null);
+export const github = new GitHub(
+  process.env.GITHUB_CLIENT_ID!,
+  process.env.GITHUB_CLIENT_SECRET!,
+  null,
+)
 
 export async function requestGithubUser(accessToken: string) {
   try {
@@ -10,11 +14,11 @@ export async function requestGithubUser(accessToken: string) {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-    });
+    })
 
-    return response.json();
+    return response.json()
   } catch (error) {
-    console.error("[requestGithubUser] Error:", error);
-    return null;
+    console.error("[requestGithubUser] Error:", error)
+    return null
   }
 }
