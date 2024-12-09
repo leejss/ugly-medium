@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss"
-import plugin from "tailwindcss/plugin"
 
 const config: Config = {
   content: [
@@ -17,29 +16,13 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      boxShadow: {
+        border:
+          "0 5px 15px 0 rgba(0,0,0,0.08), 0 15px 35px -5px rgba(25,28,33,0.2), 0 0 0 1px rgba(255,255,255,0.07)",
+      },
     },
   },
   // Adding custom components
-  plugins: [
-    plugin(function ({ addComponents, addUtilities }) {
-      addUtilities({
-        "._shadow-border": {
-          boxShadow: "0 0 0 1px black",
-        },
-      })
-      addComponents({
-        "._fc": {
-          display: "flex",
-          flexDirection: "column",
-        },
-
-        "._base-button": {
-          padding: "1rem 2rem",
-          border: "1px solid black",
-          fontWeight: "600",
-        },
-      })
-    }),
-  ],
+  plugins: [],
 }
 export default config

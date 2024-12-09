@@ -61,3 +61,7 @@ Then, based on the incoming request, you can modify the response by rewriting, r
 - check session
 
 ### Auth 성공과 실패에 대한 콜백 처리하기
+
+### Tailwindcss와 CSS 파일 결합하기
+
+- prefixing custom class name
