@@ -47,3 +47,17 @@
 ### 패스워드 생성 절차
 
 ### 세션 생성 절차
+
+- 해싱과 검증
+- 데이터베이스에는 해싱된 세션 토큰 즉 세션 아이디를 저장하고
+- 쿠키에는 오리지널 세션 토큰을 저장한다.
+- 클라이언트사이드에서 세션 토큰을 검증해서 유저 세션을 가지고 오고 세션 만료시간을 검증한다.
+
+### AuthMiddleware 구현하기
+
+Middleware allows you to run code before a request is completed.  
+Then, based on the incoming request, you can modify the response by rewriting, redirecting, modifying the request or response headers, or responding directly.
+
+- check session
+
+### Auth 성공과 실패에 대한 콜백 처리하기

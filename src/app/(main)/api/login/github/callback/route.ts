@@ -75,9 +75,11 @@ export async function GET(request: Request) {
 
     // Create session
     const sessionToken = generateSessionToken()
+
+    // 유저에 대한 세션을 생성한다.
     await createSession(sessionToken, user.id)
 
-    // Set session cookie
+    // 쿠키에 세션 토큰을 저장한다.
     cookieStore.set(sessionCookieName, sessionToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

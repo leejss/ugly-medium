@@ -14,21 +14,29 @@ const THIRTY_DAYS_IN_MS = ONE_DAY * 30
 const FIFTEEN_DAYS_IN_MS = ONE_DAY * 15
 
 export const sessionCookieName = "session_token"
-
 export function generateSessionToken(): string {
+  // 20 바이트 길이의 랜덤 바이트 배열 생성
   const bytes = new Uint8Array(20)
-  crypto.getRandomValues(bytes) // fill bytes with random values
-  const token = encodeBase32LowerCaseNoPadding(bytes) // encode as base32
+
+  // 난수로 배열을 채운다.
+  crypto.getRandomValues(bytes)
+
+  // Base32 인코딩된 문자열로 변환 - 바이너리 데이터를 텍스트로 변환한다.
+  const token = encodeBase32LowerCaseNoPadding(bytes)
   return token
 }
 
 export async function createSession(token: string, userId: string) {
+  // 세션 토큰을 해싱하여 세션 아이디를 생성
+  // 해싱을 통해서 원본 토큰이 유출되는 것을 방지 한다.
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
   const session = {
     id: sessionId,
     userId,
     expiresAt: new Date(Date.now() + THIRTY_DAYS_IN_MS),
   }
+
+  // 데이터베이스에 세선 졍보를 저장한다.
   await db.insert(sessionTable).values(session)
   return session
 }
@@ -47,6 +55,8 @@ export async function validateSessionToken(token: string) {
   }
 
   const { user, session } = result[0]
+
+  // 세션 만료시간이 지나면 세션삭제
   if (now > session.expiresAt.getTime()) {
     await db.delete(sessionTable).where(eq(sessionTable.id, sessionId))
     return null
@@ -55,6 +65,8 @@ export async function validateSessionToken(token: string) {
   if (now > session.expiresAt.getTime() - FIFTEEN_DAYS_IN_MS) {
     const newExpiresAt = new Date(now + THIRTY_DAYS_IN_MS)
     session.expiresAt = newExpiresAt
+
+    // 세션 만료시간을 업데이트한다.
     await db
       .update(sessionTable)
       .set({ expiresAt: newExpiresAt })
