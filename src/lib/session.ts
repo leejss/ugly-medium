@@ -42,37 +42,43 @@ export async function createSession(token: string, userId: string) {
 }
 
 export async function validateSessionToken(token: string) {
+  // 현재 시간을 가져옵니다.
   const now = Date.now()
+  // 토큰을 해싱하여 세션 ID를 생성합니다.
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
+  // 데이터베이스에서 세션과 연관된 사용자 정보를 조회합니다.
   const result = await db
     .select({ user: usersTable, session: sessionTable })
     .from(sessionTable)
     .innerJoin(usersTable, eq(usersTable.id, sessionTable.userId))
     .where(eq(sessionTable.id, sessionId))
 
+  // 세션이 존재하지 않으면 null을 반환합니다.
   if (result.length === 0) {
     return null
   }
 
   const { user, session } = result[0]
 
-  // 세션 만료시간이 지나면 세션삭제
+  // 세션이 만료되었으면 삭제하고 null을 반환합니다.
   if (now > session.expiresAt.getTime()) {
     await db.delete(sessionTable).where(eq(sessionTable.id, sessionId))
     return null
   }
 
+  // 세션 만료 시간이 15일 이내로 남았다면 만료 시간을 연장합니다.
   if (now > session.expiresAt.getTime() - FIFTEEN_DAYS_IN_MS) {
     const newExpiresAt = new Date(now + THIRTY_DAYS_IN_MS)
     session.expiresAt = newExpiresAt
 
-    // 세션 만료시간을 업데이트한다.
+    // 데이터베이스에서 세션의 만료 시간을 업데이트합니다.
     await db
       .update(sessionTable)
       .set({ expiresAt: newExpiresAt })
       .where(eq(sessionTable.id, sessionId))
   }
 
+  // 유효한 세션과 사용자 정보를 반환합니다.
   return { session, user }
 }
 
