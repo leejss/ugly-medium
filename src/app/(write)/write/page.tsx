@@ -1,5 +1,5 @@
-import WriteForm from "./components/WriteForm";
-import WriteLayout from "./layout/write-layout";
+import WriteForm from "./components/WriteForm"
+import WriteLayout from "./layout/write-layout"
 
 export default function Page() {
   return (
@@ -8,5 +8,5 @@ export default function Page() {
         <WriteForm />
       </div>
     </WriteLayout>
-  );
+  )
 }

@@ -1,28 +1,25 @@
 // context provider
 
-import { ReactNode, useCallback, useRef, useState } from "react";
-import { PopoverContext } from "./popover.ctx";
+import { ReactNode, useCallback, useRef, useState } from "react"
+import { PopoverContext } from "./popover.ctx"
 
 interface PopoverRootProps {
-  children: ReactNode;
-  onOpenChange?: (open: boolean) => void;
+  children: ReactNode
+  onOpenChange?: (open: boolean) => void
 }
 
-export default function PopoverRoot({
-  children,
-  onOpenChange,
-}: PopoverRootProps) {
-  const [open, setOpen] = useState(false);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+export default function PopoverRoot({ children, onOpenChange }: PopoverRootProps) {
+  const [open, setOpen] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
 
   const handleOpenChange = useCallback(
     (newOpen: boolean) => {
-      setOpen(newOpen);
-      onOpenChange?.(newOpen);
+      setOpen(newOpen)
+      onOpenChange?.(newOpen)
     },
     [onOpenChange],
-  );
+  )
 
   return (
     <PopoverContext.Provider
@@ -35,5 +32,5 @@ export default function PopoverRoot({
     >
       {children}
     </PopoverContext.Provider>
-  );
+  )
 }

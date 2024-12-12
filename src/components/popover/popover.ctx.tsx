@@ -1,19 +1,19 @@
-import { createContext, useContext, type ContextType } from "react";
+import { createContext, useContext, type ContextType } from "react"
 
 export const PopoverContext = createContext<{
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  triggerRef: React.RefObject<HTMLButtonElement>;
-  contentRef: React.RefObject<HTMLDivElement>;
-} | null>(null);
+  open: boolean
+  setOpen: (open: boolean) => void
+  triggerRef: React.RefObject<HTMLButtonElement>
+  contentRef: React.RefObject<HTMLDivElement>
+} | null>(null)
 
-export type PopoverContextType = ContextType<typeof PopoverContext>;
+export type PopoverContextType = ContextType<typeof PopoverContext>
 
 export const usePopover = () => {
-  const context = useContext(PopoverContext);
+  const context = useContext(PopoverContext)
   if (!context) {
-    throw new Error("usePopover must be used within a Popover component");
+    throw new Error("usePopover must be used within a Popover component")
   }
 
-  return context;
-};
+  return context
+}

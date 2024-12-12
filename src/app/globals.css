@@ -8,7 +8,7 @@
     background: var(--background);
     font-family: Arial, Helvetica, sans-serif;
     -webkit-text-size-adjust: 100%;
-    @apply antialiased font-sans;
+    @apply font-sans antialiased;
   }
 }
 

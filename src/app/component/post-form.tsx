@@ -1,4 +1,4 @@
-import { createPost } from "../actions";
+import { createPost } from "../actions"
 
 export default function PostForm() {
   return (
@@ -7,21 +7,18 @@ export default function PostForm() {
         type="text"
         name="title"
         placeholder="Title"
-        className="w-full p-2 mb-2 border rounded"
+        className="mb-2 w-full rounded border p-2"
         required
       />
       <textarea
         name="content"
         placeholder="Content"
-        className="w-full p-2 mb-2 border rounded"
+        className="mb-2 w-full rounded border p-2"
         required
       ></textarea>
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
+      <button type="submit" className="rounded bg-blue-500 px-4 py-2 text-white">
         Create Post
       </button>
     </form>
-  );
+  )
 }
