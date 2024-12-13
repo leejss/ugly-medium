@@ -5,7 +5,7 @@ import {
   createSession,
   generateSessionToken,
   invalidateSession,
-  sessionCookieName,
+  SESSION_TOKEN_COOKIE_NAME,
 } from "@/lib/session"
 import { hashPassword, verifyPassword } from "@/lib/utils/password"
 import { cookies } from "next/headers"
@@ -55,7 +55,7 @@ export async function signInAction({ email, password }: AuthFormInput) {
     // Create a new session
     const token = generateSessionToken()
     await createSession(token, user.id)
-    cookies().set(sessionCookieName, token)
+    cookies().set(SESSION_TOKEN_COOKIE_NAME, token)
     return user
   } catch (error) {
     console.error("Fail:signInAction", error)
@@ -66,7 +66,7 @@ export async function signInAction({ email, password }: AuthFormInput) {
 export async function signOutAction(sessionId: string) {
   try {
     await invalidateSession(sessionId)
-    cookies().set(sessionCookieName, "", { expires: new Date(0) })
+    cookies().set(SESSION_TOKEN_COOKIE_NAME, "", { expires: new Date(0) })
   } catch (error) {
     console.error("Fail:signOutAction", error)
     throw error

@@ -1,4 +1,4 @@
-import { db } from "@/db"
+import { db, SessionTable } from "@/db"
 import { SelectSession, sessionTable } from "@/db/tables/session"
 import { SelectUser, usersTable } from "@/db/tables/users"
 import { sha256 } from "@oslojs/crypto/sha2"
@@ -13,7 +13,7 @@ const ONE_DAY = ONE_HOUR * 24
 const THIRTY_DAYS_IN_MS = ONE_DAY * 30
 const FIFTEEN_DAYS_IN_MS = ONE_DAY * 15
 
-export const sessionCookieName = "session_token"
+export const SESSION_TOKEN_COOKIE_NAME = "ugly_session_token"
 export function generateSessionToken(): string {
   // 20 바이트 길이의 랜덤 바이트 배열 생성
   const bytes = new Uint8Array(20)
@@ -26,19 +26,20 @@ export function generateSessionToken(): string {
   return token
 }
 
-export async function createSession(token: string, userId: string) {
-  // 세션 토큰을 해싱하여 세션 아이디를 생성
-  // 해싱을 통해서 원본 토큰이 유출되는 것을 방지 한다.
-  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)))
+export async function createSession(sessionToken: string, userId: string) {
+  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(sessionToken)))
   const session = {
     id: sessionId,
     userId,
     expiresAt: new Date(Date.now() + THIRTY_DAYS_IN_MS),
   }
 
-  // 데이터베이스에 세선 졍보를 저장한다.
-  await db.insert(sessionTable).values(session)
-  return session
+  await SessionTable.insertSession(session)
+
+  return {
+    ...session,
+    sessionToken,
+  }
 }
 
 export async function validateSessionToken(token: string) {
@@ -83,7 +84,7 @@ export async function validateSessionToken(token: string) {
 }
 
 export function getSessionFromCookie() {
-  const cookie = cookies().get(sessionCookieName)
+  const cookie = cookies().get(SESSION_TOKEN_COOKIE_NAME)
 
   if (!cookie) {
     return null
@@ -101,3 +102,25 @@ export type SessionData = {
   session: SelectSession
   user: SelectUser
 }
+
+function createSessionCookie() {
+  const set = (sessionToken: string) => {
+    cookies().set(SESSION_TOKEN_COOKIE_NAME, sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+    })
+  }
+  const get = () => {
+    const cookie = cookies().get(SESSION_TOKEN_COOKIE_NAME)
+    return cookie?.value ?? null
+  }
+
+  return {
+    set,
+    get,
+  }
+}
+
+export const sessionCookie = createSessionCookie()

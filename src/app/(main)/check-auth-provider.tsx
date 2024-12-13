@@ -1,5 +1,5 @@
 // Import required dependencies and types
-import { sessionCookieName, validateSessionToken } from "@/lib/session"
+import { SESSION_TOKEN_COOKIE_NAME, validateSessionToken } from "@/lib/session"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { PropsWithChildren } from "react"
@@ -44,7 +44,7 @@ const validateAuthCookie = async (token: string | undefined): Promise<AuthResult
 // Main auth provider component
 export default async function CheckAuthProvider({ children }: PropsWithChildren) {
   // Get session cookie
-  const cookie = cookies().get(sessionCookieName)
+  const cookie = cookies().get(SESSION_TOKEN_COOKIE_NAME)
 
   // Validate auth status
   const authResult = await validateAuthCookie(cookie?.value)
