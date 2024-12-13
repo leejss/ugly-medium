@@ -65,3 +65,7 @@ Then, based on the incoming request, you can modify the response by rewriting, r
 ### Tailwindcss와 CSS 파일 결합하기
 
 - prefixing custom class name
+
+## server and client
+
+- 서버 코드와 클라이언트 구분하기

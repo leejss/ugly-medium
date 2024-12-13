@@ -1,13 +1,10 @@
-import { createContext, useContext, type ContextType } from "react"
+import { createContext, useContext } from "react"
+import { useAtom } from "jotai"
+import { createPopoverAtoms } from "./popover.store"
 
 export const PopoverContext = createContext<{
-  open: boolean
-  setOpen: (open: boolean) => void
-  triggerRef: React.RefObject<HTMLButtonElement>
-  contentRef: React.RefObject<HTMLDivElement>
+  atoms: ReturnType<typeof createPopoverAtoms>
 } | null>(null)
-
-export type PopoverContextType = ContextType<typeof PopoverContext>
 
 export const usePopover = () => {
   const context = useContext(PopoverContext)
@@ -15,5 +12,18 @@ export const usePopover = () => {
     throw new Error("usePopover must be used within a Popover component")
   }
 
-  return context
+  const [open, setOpen] = useAtom(context.atoms.openAtom)
+  const [triggerRef] = useAtom(context.atoms.triggerRefAtom)
+  const [contentRef] = useAtom(context.atoms.contentRefAtom)
+
+  if (!triggerRef || !contentRef) {
+    throw new Error("Popover refs not initialized")
+  }
+
+  return {
+    open,
+    setOpen,
+    triggerRef,
+    contentRef,
+  }
 }

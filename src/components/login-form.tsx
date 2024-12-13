@@ -1,7 +1,6 @@
 "use client"
 
 import SignInWithGithub from "@/features/auth/github/ui/signin-with-github"
-import { signInWithGoogle } from "@/app/actions"
 
 export default function LoginForm() {
   return (
@@ -14,7 +13,7 @@ export default function LoginForm() {
       <div className="flex gap-3">
         {/* TODO: 재사용가능한 컴포넌트로 만들기 */}
         <SignInWithGithub />
-        <button
+        {/* <button
           onClick={() => signInWithGoogle()}
           className="flex w-full items-center justify-center gap-2 rounded-md bg-white px-2 py-1 text-gray-800 hover:bg-gray-100"
         >
@@ -37,7 +36,7 @@ export default function LoginForm() {
             />
           </svg>
           Google
-        </button>
+        </button> */}
       </div>
 
       <div className="text-center text-sm">

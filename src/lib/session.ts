@@ -5,6 +5,7 @@ import { sha256 } from "@oslojs/crypto/sha2"
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding"
 import { eq } from "drizzle-orm"
 import { cookies } from "next/headers"
+import { createCookieStore } from "./utils"
 
 const ONE_SEC = 1000
 const ONE_MIN = ONE_SEC * 60
@@ -103,24 +104,4 @@ export type SessionData = {
   user: SelectUser
 }
 
-function createSessionCookie() {
-  const set = (sessionToken: string) => {
-    cookies().set(SESSION_TOKEN_COOKIE_NAME, sessionToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-    })
-  }
-  const get = () => {
-    const cookie = cookies().get(SESSION_TOKEN_COOKIE_NAME)
-    return cookie?.value ?? null
-  }
-
-  return {
-    set,
-    get,
-  }
-}
-
-export const sessionCookie = createSessionCookie()
+export const sessionCookie = createCookieStore(SESSION_TOKEN_COOKIE_NAME)

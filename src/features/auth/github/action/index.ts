@@ -1,10 +1,15 @@
 import { AuthTable, UsersTable } from "@/db"
 import { createSession, generateSessionToken, sessionCookie } from "@/lib/session"
+import { createCookieStore } from "@/lib/utils"
 import { generateState, GitHub, OAuth2Tokens } from "arctic"
 import { cookies } from "next/headers"
 
 const GITHUB_STATE_COOKIE_NAME = "github_oauth_state"
 const GITHUB_USER_ENDPOINT = "https://api.github.com/user"
+
+export const stateCookieStore = createCookieStore(GITHUB_STATE_COOKIE_NAME, {
+  maxAge: 60 * 10,
+})
 
 export async function requestGithubUser(accessToken: string) {
   try {
@@ -31,7 +36,7 @@ export async function prepareGithubLogin(): Promise<string> {
   const state = generateState()
 
   // Get cookie store instance
-  const cookieStore = cookies()
+  // const cookieStore = cookies()
 
   // Initialize GitHub OAuth client with credentials
   const github = new GitHub(process.env.GITHUB_CLIENT_ID!, process.env.GITHUB_CLIENT_SECRET!, null)
@@ -40,13 +45,7 @@ export async function prepareGithubLogin(): Promise<string> {
   const url = github.createAuthorizationURL(state, [])
 
   // Store state in cookie for validation during callback
-  cookieStore.set(GITHUB_STATE_COOKIE_NAME, state, {
-    path: "/", // Cookie available for all paths
-    secure: process.env.NODE_ENV === "production", // HTTPS only in production
-    httpOnly: true, // Not accessible via JavaScript
-    maxAge: 60 * 10, // Expires in 10 minutes
-    sameSite: "lax", // Moderate CSRF protection
-  })
+  stateCookieStore.set(state)
 
   return url.toString()
 }
